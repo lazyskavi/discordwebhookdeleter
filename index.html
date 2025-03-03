@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Webhook Deleter</title>
+    <style>
+        /* Importing Discord's font (or a close alternative) */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: url('background.png') no-repeat center center fixed;
+            background-size: cover; /* Background image covering entire screen */
+            backdrop-filter: blur(10px); /* Blur effect on the background */
+            position: relative; /* To position the Discord text */
+        }
+
+        /* Position the "Discord Webhook Deleter" text at the top-left corner */
+        .discord-text {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Slight shadow for readability */
+        }
+
+        .container {
+            background-color: rgba(28, 30, 34, 0.9); /* Slightly transparent background */
+            padding: 20px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            overflow: hidden; /* Prevent the background from overflowing during animation */
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: scale(1.05); /* Zoom-in effect when hovering over the container */
+        }
+
+        h1 {
+            color: #fff; /* White color for title */
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #40444b; /* Input border color */
+            border-radius: 4px;
+            background-color: #2f3136; /* Input background */
+            color: #b9bbbe; /* Input text color */
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #7289da; /* Highlight border when focused */
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5865f2; /* Button color */
+            border: none;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #4752c4; /* Lighter blue on hover */
+            transform: scale(1.05);
+        }
+
+        button:active {
+            background-color: #3f47a3; /* Darker blue on click */
+            transform: scale(1);
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #f04747; /* Red color for error messages */
+        }
+
+        .message.success {
+            color: #3ba55c; /* Green color for success messages */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Discord Webhook Deleter</h1>
+        <input type="text" id="webhookUrl" placeholder="Paste webhook URL here" />
+        <button onclick="deleteWebhook()">Delete Webhook</button>
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        function deleteWebhook() {
+            const url = document.getElementById('webhookUrl').value.trim();
+            if (!url) {
+                document.getElementById('message').innerText = 'Please enter a webhook URL.';
+                document.getElementById('message').classList.remove('success');
+                return;
+            }
+
+            fetch(url, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('message').innerText = 'Webhook successfully deleted.';
+                    document.getElementById('message').classList.add('success');
+                } else {
+                    document.getElementById('message').innerText = 'Error occurred while deleting webhook.';
+                    document.getElementById('message').classList.remove('success');
+                }
+            })
+            .catch(error => {
+                document.getElementById('message').innerText = 'Connection error: ' + error;
+                document.getElementById('message').classList.remove('success');
+            });
+        }
+    </script>
+</body>
+</html>
